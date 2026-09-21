@@ -2,20 +2,7 @@
 
 namespace App\Services\Order\Store;
 
-use App\Models\User;
-use App\Services\Basket\BasketService;
-use App\Services\Order\Store\DTO\OrderPayload;
-use App\Services\Order\Store\Exceptions\TechnicalStoreException;
-use App\Services\Order\Store\Exceptions\UnpaidOrderException;
-use App\Services\Order\Store\Pipes\AwardGift;
-use App\Services\Order\Store\Pipes\CheckUnpaidOrder;
-use App\Services\Order\Store\Pipes\CreateOrder;
-use App\Services\Order\Store\Pipes\CreateOrderItems;
-use App\Services\Order\Store\Pipes\CreateTransaction;
-use App\Services\Order\Store\Pipes\PrepareOrderData;
-use App\Services\TBank\TBank;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Facades\DB;
+// ... example
 
 class OrderProcessOrchestrator
 {
@@ -53,6 +40,8 @@ class OrderProcessOrchestrator
 
             return $this->TBank->getPaymentUrl($transaction, $order, $user);
 
+        } catch (BusinessException|TechnicalException $exception) {
+            throw $exception;
         } catch (UnpaidOrderException $exception) {
             return $exception->getPaymentUrl();
         } catch (\Throwable $exception) {
